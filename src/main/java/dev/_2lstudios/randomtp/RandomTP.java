@@ -34,6 +34,14 @@ public class RandomTP extends JavaPlugin {
         pm.registerEvents(new PlayerRespawnListener(this), this);
     }
 
+    public boolean hasPlayerSpawn(final Player player) {
+        final String uuid = player.getUniqueId().toString();
+        PlayerData data = this.playerRepository
+                .findOne(MapFactory.create("uuid", uuid));
+
+        return data != null && data.spawnX == -1 && data.spawnY == -1 && data.spawnZ == -1;
+    }
+
     public Location getPlayerSpawn(final Player player) {
         final String uuid = player.getUniqueId().toString();
         PlayerData data = this.playerRepository

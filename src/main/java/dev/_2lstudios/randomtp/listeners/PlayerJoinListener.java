@@ -16,6 +16,8 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent e) {
-        e.getPlayer().teleport(this.plugin.getPlayerSpawn(e.getPlayer()));
+        if (!this.plugin.hasPlayerSpawn(e.getPlayer())) {
+            e.getPlayer().teleport(this.plugin.getPlayerSpawn(e.getPlayer()));
+        }
     }
 }

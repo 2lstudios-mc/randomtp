@@ -25,7 +25,7 @@ public class TeleportUtils {
                 return null;
             }
 
-            return new Location(world, x, y - 1, z);
+            return new Location(world, x, y + 1, z);
         }
 
         return null;

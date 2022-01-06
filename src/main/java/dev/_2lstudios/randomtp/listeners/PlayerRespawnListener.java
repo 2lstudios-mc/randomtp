@@ -16,6 +16,8 @@ public class PlayerRespawnListener implements Listener {
 
     @EventHandler
     public void onPlayerRespawn(final PlayerRespawnEvent e) {
-        e.setRespawnLocation(this.plugin.getPlayerSpawn(e.getPlayer()));
+        if (!e.isBedSpawn()) {
+            e.setRespawnLocation(this.plugin.getPlayerSpawn(e.getPlayer()));
+        }
     }
 }
