@@ -1,3 +1,3 @@
-# Bukkit Boilerplate
+# RandomTP
 
-Sample project to create Plugins for Bukkit.
+Teleport on join, save location and use it on respawn.
