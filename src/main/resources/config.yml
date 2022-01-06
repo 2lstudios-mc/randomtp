@@ -1,0 +1,6 @@
+database:
+  uri: "mongodb://localhost/minecraft"
+  collection: "UserSpawn"
+
+teleport:
+  ratio: 10000
