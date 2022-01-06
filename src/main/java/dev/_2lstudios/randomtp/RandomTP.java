@@ -5,6 +5,7 @@ import com.dotphin.milkshakeorm.providers.Provider;
 import com.dotphin.milkshakeorm.repository.Repository;
 import com.dotphin.milkshakeorm.utils.MapFactory;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -39,7 +40,7 @@ public class RandomTP extends JavaPlugin {
         PlayerData data = this.playerRepository
                 .findOne(MapFactory.create("uuid", uuid));
 
-        return data != null && data.spawnX == -1 && data.spawnY == -1 && data.spawnZ == -1;
+        return data != null && data.spawnX != -1 && data.spawnY != -1 && data.spawnZ != -1;
     }
 
     public Location getPlayerSpawn(final Player player) {
@@ -60,10 +61,16 @@ public class RandomTP extends JavaPlugin {
             data.spawnX = randomLoc.getX();
             data.spawnY = randomLoc.getY();
             data.spawnZ = randomLoc.getZ();
+            data.spawnWorld = randomLoc.getWorld().getName();
             data.save();
         }
 
-        return new Location(player.getWorld(), data.spawnX, data.spawnY,
+        if (data.spawnWorld == null || data.spawnWorld == "") {
+            data.spawnWorld = Bukkit.getServer().getWorlds().get(0).getName();
+            data.save();
+        }
+
+        return new Location(Bukkit.getWorld(data.spawnWorld), data.spawnX, data.spawnY,
                 data.spawnZ);
     }
 }
