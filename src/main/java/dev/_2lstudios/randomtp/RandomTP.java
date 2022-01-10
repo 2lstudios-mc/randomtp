@@ -5,8 +5,8 @@ import com.dotphin.milkshakeorm.providers.Provider;
 import com.dotphin.milkshakeorm.repository.Repository;
 import com.dotphin.milkshakeorm.utils.MapFactory;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,15 +21,12 @@ public class RandomTP extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Save default config.
         this.saveDefaultConfig();
 
-        // Initialize database.
         final Provider provider = MilkshakeORM.connect(this.getConfig().getString("database.uri"));
         this.playerRepository = MilkshakeORM.addRepository(PlayerData.class, provider,
                 this.getConfig().getString("database.collection"));
 
-        // Register listeners.
         final PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new PlayerJoinListener(this), this);
         pm.registerEvents(new PlayerRespawnListener(this), this);
@@ -53,24 +50,19 @@ public class RandomTP extends JavaPlugin {
             data.uuid = uuid;
         }
 
+        final World world = getServer().getWorlds().get(0);
+
         if (data.spawnX == -1 || data.spawnY == -1 || data.spawnZ == -1) {
-            final Location playerLoc = player.getLocation();
-            final Location randomLoc = TeleportUtils.findAvailableSafeLocation(playerLoc.getWorld(),
+            final Location randomLoc = TeleportUtils.findAvailableSafeLocation(world,
                     this.getConfig().getInt("teleport.ratio"));
 
             data.spawnX = randomLoc.getX();
             data.spawnY = randomLoc.getY();
             data.spawnZ = randomLoc.getZ();
-            data.spawnWorld = randomLoc.getWorld().getName();
             data.save();
         }
 
-        if (data.spawnWorld == null || data.spawnWorld == "") {
-            data.spawnWorld = Bukkit.getServer().getWorlds().get(0).getName();
-            data.save();
-        }
-
-        return new Location(Bukkit.getWorld(data.spawnWorld), data.spawnX, data.spawnY,
+        return new Location(world, data.spawnX, data.spawnY,
                 data.spawnZ);
     }
 }

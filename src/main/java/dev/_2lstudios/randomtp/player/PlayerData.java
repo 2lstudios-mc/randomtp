@@ -19,7 +19,4 @@ public class PlayerData extends Entity {
 
     @Prop
     public double spawnZ = -1;
-
-    @Prop
-    public String spawnWorld;
 }
